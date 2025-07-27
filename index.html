@@ -8,44 +8,65 @@
     body {
       font-family: sans-serif;
       padding: 2em;
-      background: #f3f3f3;
+      background: #f9f9f9;
       color: #222;
       max-width: 800px;
       margin: auto;
+      text-align: center;
     }
 
     h1 {
       font-size: 2em;
       margin-bottom: 1em;
-      text-align: center;
     }
 
     label {
       font-weight: bold;
-      margin-top: 1em;
       display: block;
+      text-align: left;
+      margin-top: 1.5em;
     }
 
     input, select {
       width: 100%;
-      padding: 0.5em;
+      padding: 0.6em;
       font-size: 1em;
       margin-top: 0.3em;
-      margin-bottom: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
 
     #signature-preview {
-      margin-top: 2em;
+      margin: 2em 0;
       background: #fff;
-      border: 2px dashed #ccc;
+      border: 2px dashed #aaa;
       padding: 1em;
       font-size: 48px;
-      text-align: right;
       direction: rtl;
+      text-align: right;
       min-height: 100px;
     }
 
-    /* 字体导入 */
+    button {
+      margin: 0.5em;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #download-btn {
+      background-color: #2c7be5;
+      color: white;
+    }
+
+    #customize-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    /* Font imports */
     @font-face {
       font-family: 'NotoNaskhArabic';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/NotoNaskhArabic-Regular.woff2?v=1753624745') format('woff2'),
@@ -92,7 +113,7 @@
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ScheherazadeNew-Regular.woff2?v=1753586413') format('woff2');
     }
 
-    /* 字体类 */
+    /* Font classes */
     .font-NotoNaskhArabic { font-family: 'NotoNaskhArabic'; }
     .font-Harmattan { font-family: 'Harmattan'; }
     .font-ElMessiri { font-family: 'ElMessiri'; }
@@ -102,7 +123,6 @@
     .font-GreatVibes { font-family: 'GreatVibes'; direction: ltr; text-align: left; }
     .font-Amiri { font-family: 'Amiri'; }
     .font-ScheherazadeNew { font-family: 'ScheherazadeNew'; }
-
   </style>
 </head>
 <body>
@@ -129,10 +149,17 @@
     توقيعك سيظهر هنا
   </div>
 
+  <button id="download-btn">⬇️ Download Signature</button>
+  <button id="customize-btn" onclick="window.location.href='https://clocore.com/products/custom-portable-handwritten-authorised-signatory-stamp-signature-seal-self-inking-clear-impression-thousands-of-uses-with-one-ink-refill'">🖨️ Customize Signature Stamp</button>
+
+  <canvas id="signature-canvas" style="display:none;"></canvas>
+
   <script>
     const input = document.getElementById('name-input');
     const select = document.getElementById('font-select');
     const preview = document.getElementById('signature-preview');
+    const canvas = document.getElementById('signature-canvas');
+    const downloadBtn = document.getElementById('download-btn');
 
     function updateSignature() {
       const value = input.value.trim() || 'توقيعك سيظهر هنا';
@@ -141,7 +168,6 @@
       preview.textContent = value;
       preview.className = fontClass;
 
-      // 设置方向
       if (fontClass === 'font-GreatVibes') {
         preview.style.direction = 'ltr';
         preview.style.textAlign = 'left';
@@ -151,8 +177,36 @@
       }
     }
 
+    function downloadSignature() {
+      const text = preview.textContent;
+      const fontClass = select.value;
+      const fontFamily = getComputedStyle(preview).fontFamily;
+      const direction = getComputedStyle(preview).direction;
+
+      canvas.width = preview.clientWidth;
+      canvas.height = preview.clientHeight;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#000000";
+      ctx.font = "48px " + fontFamily;
+      ctx.textAlign = direction === 'rtl' ? 'right' : 'left';
+      ctx.textBaseline = 'top';
+
+      const x = direction === 'rtl' ? canvas.width - 20 : 20;
+      ctx.fillText(text, x, 20);
+
+      const link = document.createElement('a');
+      link.download = "signature.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
     input.addEventListener('input', updateSignature);
     select.addEventListener('change', updateSignature);
+    downloadBtn.addEventListener('click', downloadSignature);
     updateSignature();
   </script>
 
