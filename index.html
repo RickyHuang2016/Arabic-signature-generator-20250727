@@ -1,171 +1,146 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Arabic Signature Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: 'Tajawal', sans-serif;
-      background-color: #fdfdfd;
-      padding: 20px;
+      font-family: sans-serif;
+      background-color: #f9f9f9;
       text-align: center;
-      direction: rtl;
+      padding: 30px;
     }
-
     h1 {
       font-size: 28px;
-      color: #222;
+      margin-bottom: 20px;
     }
-
-    input[type="text"] {
-      font-size: 20px;
+    select, input {
       padding: 10px;
+      margin: 10px;
+      font-size: 18px;
       width: 80%;
-      max-width: 500px;
-      margin: 20px auto;
-      border: 2px solid #ccc;
-      border-radius: 8px;
+      max-width: 400px;
     }
-
-    .signature-preview {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin: 30px 0;
+    #signature-preview {
+      margin: 30px auto;
+      padding: 20px;
+      border: 2px dashed #ccc;
+      width: fit-content;
+      background: white;
     }
-
-    .signature {
-      padding: 12px 20px;
-      border-radius: 12px;
-      background-color: #fff;
-      box-shadow: 0 0 6px rgba(0,0,0,0.1);
-      font-size: 32px;
-      min-width: 280px;
+    #signature-text {
+      font-size: 48px;
+      direction: rtl;
     }
-
-    .font-0 { font-family: 'NotoNaskhArabic'; }
-    .font-1 { font-family: 'Harmattan'; }
-    .font-2 { font-family: 'ElMessiri'; }
-    .font-3 { font-family: 'ReemKufiFun'; }
-    .font-4 { font-family: 'Mada'; }
-    .font-5 { font-family: 'Tajawal'; }
-    .font-6 { font-family: 'GreatVibes'; }
-    .font-7 { font-family: 'Amiri'; }
-    .font-8 { font-family: 'ScheherazadeNew'; }
-
-    .button {
+    .button-download, .button-custom {
       display: inline-block;
+      margin: 10px;
       padding: 12px 24px;
-      margin: 10px 12px;
       font-size: 16px;
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
-      transition: background-color 0.3s;
     }
-
-    .btn-blue {
+    .button-download {
       background-color: #007BFF;
     }
-    .btn-blue:hover {
+    .button-download:hover {
       background-color: #0056b3;
     }
-
-    .btn-green {
+    .button-custom {
       background-color: #28a745;
     }
-    .btn-green:hover {
+    .button-custom:hover {
       background-color: #1e7e34;
     }
+  </style>
 
+  <!-- Load fonts -->
+  <style>
     @font-face {
       font-family: 'NotoNaskhArabic';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/NotoNaskhArabic-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/NotoNaskhArabic-Regular.woff2?v=1753624745') format('woff2');
     }
-
     @font-face {
       font-family: 'Harmattan';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Harmattan-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Harmattan-Regular.woff2?v=1753624745') format('woff2');
     }
-
     @font-face {
       font-family: 'ElMessiri';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ElMessiri-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ElMessiri-Regular.woff2?v=1753624745') format('woff2');
     }
-
     @font-face {
       font-family: 'ReemKufiFun';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ReemKufiFun-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ReemKufiFun-Regular.woff2?v=1753624745') format('woff2');
     }
-
     @font-face {
       font-family: 'Mada';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Mada-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Mada-Regular.woff2?v=1753624703') format('woff2');
     }
-
     @font-face {
       font-family: 'Tajawal';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Tajawal-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Tajawal-Regular.woff2?v=1753624702') format('woff2');
     }
-
-    @font-face {
-      font-family: 'GreatVibes';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/GreatVibes-Regular.woff2') format('woff2');
-    }
-
     @font-face {
       font-family: 'Amiri';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Amiri-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Amiri-Regular.woff2?v=1753586413') format('woff2');
     }
-
     @font-face {
       font-family: 'ScheherazadeNew';
-      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ScheherazadeNew-Regular.woff2') format('woff2');
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ScheherazadeNew-Regular.woff2?v=1753586413') format('woff2');
     }
   </style>
 </head>
 <body>
-
   <h1>Arabic Signature Generator</h1>
-  <input type="text" id="nameInput" placeholder="اكتب اسمك هنا...">
+  <input type="text" id="nameInput" placeholder="Type your Arabic name here">
+  <br>
+  <select id="fontSelect">
+    <option value="NotoNaskhArabic">Noto Naskh Arabic</option>
+    <option value="Harmattan">Harmattan</option>
+    <option value="ElMessiri">El Messiri</option>
+    <option value="ReemKufiFun">Reem Kufi Fun</option>
+    <option value="Mada">Mada</option>
+    <option value="Tajawal">Tajawal</option>
+    <option value="Amiri">Amiri</option>
+    <option value="ScheherazadeNew">Scheherazade New</option>
+  </select>
 
-  <div class="signature-preview" id="previewArea"></div>
-
-  <div>
-    <button class="button btn-blue" onclick="downloadSignatures()">تحميل التوقيع</button>
-    <a class="button btn-green" href="https://clocore.com/products/custom-portable-handwritten-authorised-signatory-stamp-signature-seal-self-inking-clear-impression-thousands-of-uses-with-one-ink-refill" target="_blank">✍️ اطبع ختم توقيعك</a>
+  <div id="signature-preview">
+    <div id="signature-text">التوقيع</div>
   </div>
 
+  <button class="button-download" onclick="downloadSignature()">Download Signature</button>
+  <a class="button-custom" href="https://clocore.com/products/custom-portable-handwritten-authorised-signatory-stamp-signature-seal-self-inking-clear-impression-thousands-of-uses-with-one-ink-refill" target="_blank">Customize Signature Stamp</a>
+
   <script>
-    const fonts = [
-      'font-0', 'font-1', 'font-2', 'font-3',
-      'font-4', 'font-5', 'font-6', 'font-7', 'font-8'
-    ];
+    const nameInput = document.getElementById("nameInput");
+    const fontSelect = document.getElementById("fontSelect");
+    const signatureText = document.getElementById("signature-text");
 
-    const input = document.getElementById('nameInput');
-    const previewArea = document.getElementById('previewArea');
+    function updateSignature() {
+      const name = nameInput.value;
+      const font = fontSelect.value;
+      signatureText.textContent = name || "التوقيع";
+      signatureText.style.fontFamily = font;
+    }
 
-    function render() {
-      const name = input.value.trim() || 'توقيعك';
-      previewArea.innerHTML = '';
-      fonts.forEach(font => {
-        const div = document.createElement('div');
-        div.className = 'signature ' + font;
-        div.textContent = name;
-        previewArea.appendChild(div);
+    nameInput.addEventListener("input", updateSignature);
+    fontSelect.addEventListener("change", updateSignature);
+
+    function downloadSignature() {
+      const preview = document.getElementById("signature-preview");
+      html2canvas(preview).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'arabic-signature.png';
+        link.href = canvas.toDataURL();
+        link.click();
       });
     }
-
-    input.addEventListener('input', render);
-    window.addEventListener('load', render);
-
-    function downloadSignatures() {
-      alert("لحفظ توقيعك، اضغط بزر الفأرة الأيمن على النمط المفضل واختر 'حفظ الصورة باسم' أو التقط لقطة شاشة.");
-    }
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </body>
 </html>
