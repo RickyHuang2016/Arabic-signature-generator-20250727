@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arabic Signature Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      background: #f3f3f3;
+      color: #222;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 1em;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.5em;
+      font-size: 1em;
+      margin-top: 0.3em;
+      margin-bottom: 1em;
+    }
+
+    #signature-preview {
+      margin-top: 2em;
+      background: #fff;
+      border: 2px dashed #ccc;
+      padding: 1em;
+      font-size: 48px;
+      text-align: right;
+      direction: rtl;
+      min-height: 100px;
+    }
+
+    /* 字体导入 */
+    @font-face {
+      font-family: 'NotoNaskhArabic';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/NotoNaskhArabic-Regular.woff2?v=1753624745') format('woff2'),
+           url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/NotoNaskhArabic-Regular.woff?v=1753624745') format('woff');
+    }
+
+    @font-face {
+      font-family: 'Harmattan';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Harmattan-Regular.woff2?v=1753624745') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'ElMessiri';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ElMessiri-Regular.woff2?v=1753624745') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'ReemKufiFun';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ReemKufiFun-Regular.woff2?v=1753624745') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'Mada';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Mada-Regular.woff2?v=1753624703') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'Tajawal';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Tajawal-Regular.woff2?v=1753624702') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'GreatVibes';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/GreatVibes-Regular.woff2?v=1753586413') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'Amiri';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Amiri-Regular.woff2?v=1753586413') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'ScheherazadeNew';
+      src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ScheherazadeNew-Regular.woff2?v=1753586413') format('woff2');
+    }
+
+    /* 字体类 */
+    .font-NotoNaskhArabic { font-family: 'NotoNaskhArabic'; }
+    .font-Harmattan { font-family: 'Harmattan'; }
+    .font-ElMessiri { font-family: 'ElMessiri'; }
+    .font-ReemKufiFun { font-family: 'ReemKufiFun'; }
+    .font-Mada { font-family: 'Mada'; }
+    .font-Tajawal { font-family: 'Tajawal'; }
+    .font-GreatVibes { font-family: 'GreatVibes'; direction: ltr; text-align: left; }
+    .font-Amiri { font-family: 'Amiri'; }
+    .font-ScheherazadeNew { font-family: 'ScheherazadeNew'; }
+
+  </style>
+</head>
+<body>
+
+  <h1>🖋️ Arabic Signature Generator</h1>
+
+  <label for="name-input">Enter your name in Arabic:</label>
+  <input type="text" id="name-input" placeholder="مثال: محمد الأحمد">
+
+  <label for="font-select">Choose a font style:</label>
+  <select id="font-select">
+    <option value="font-NotoNaskhArabic">Noto Naskh Arabic</option>
+    <option value="font-Harmattan">Harmattan</option>
+    <option value="font-ElMessiri">El Messiri</option>
+    <option value="font-ReemKufiFun">Reem Kufi Fun</option>
+    <option value="font-Mada">Mada</option>
+    <option value="font-Tajawal">Tajawal</option>
+    <option value="font-GreatVibes">Great Vibes (Latin)</option>
+    <option value="font-Amiri">Amiri</option>
+    <option value="font-ScheherazadeNew">Scheherazade New</option>
+  </select>
+
+  <div id="signature-preview" class="font-NotoNaskhArabic">
+    توقيعك سيظهر هنا
+  </div>
+
+  <script>
+    const input = document.getElementById('name-input');
+    const select = document.getElementById('font-select');
+    const preview = document.getElementById('signature-preview');
+
+    function updateSignature() {
+      const value = input.value.trim() || 'توقيعك سيظهر هنا';
+      const fontClass = select.value;
+
+      preview.textContent = value;
+      preview.className = fontClass;
+
+      // 设置方向
+      if (fontClass === 'font-GreatVibes') {
+        preview.style.direction = 'ltr';
+        preview.style.textAlign = 'left';
+      } else {
+        preview.style.direction = 'rtl';
+        preview.style.textAlign = 'right';
+      }
+    }
+
+    input.addEventListener('input', updateSignature);
+    select.addEventListener('change', updateSignature);
+    updateSignature();
+  </script>
+
+</body>
+</html>
