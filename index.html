@@ -1,214 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Arabic Signature Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: sans-serif;
       padding: 2em;
       background: #f9f9f9;
-      color: #222;
-      max-width: 800px;
-      margin: auto;
       text-align: center;
     }
-
     h1 {
       font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+    input[type="text"] {
+      font-size: 1.2em;
+      padding: 0.5em;
+      width: 80%;
+      max-width: 400px;
       margin-bottom: 1em;
     }
-
-    label {
-      font-weight: bold;
-      display: block;
-      text-align: left;
-      margin-top: 1.5em;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.6em;
+    select {
       font-size: 1em;
-      margin-top: 0.3em;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 0.4em;
+      margin-bottom: 1em;
     }
-
-    #signature-preview {
-      margin: 2em 0;
+    #preview {
+      font-size: 2.5em;
+      margin: 1em auto;
       background: #fff;
-      border: 2px dashed #aaa;
       padding: 1em;
-      font-size: 48px;
+      border: 1px solid #ccc;
+      width: fit-content;
+      max-width: 90%;
+      border-radius: 8px;
       direction: rtl;
-      text-align: right;
-      min-height: 100px;
     }
-
-    button {
-      margin: 0.5em;
-      padding: 0.8em 1.5em;
+    .btn {
+      display: inline-block;
+      margin: 1em 0.5em;
+      padding: 0.6em 1.5em;
       font-size: 1em;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-    }
-
-    #download-btn {
-      background-color: #2c7be5;
       color: white;
+      background-color: #2c3e50;
+      transition: background 0.3s;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background-color: #34495e;
     }
 
-    #customize-btn {
-      background-color: #28a745;
-      color: white;
-    }
-
-    /* Font imports */
+    /* Custom Fonts */
     @font-face {
       font-family: 'NotoNaskhArabic';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/NotoNaskhArabic-Regular.woff2?v=1753624745') format('woff2'),
            url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/NotoNaskhArabic-Regular.woff?v=1753624745') format('woff');
     }
-
     @font-face {
       font-family: 'Harmattan';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Harmattan-Regular.woff2?v=1753624745') format('woff2');
     }
-
     @font-face {
       font-family: 'ElMessiri';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ElMessiri-Regular.woff2?v=1753624745') format('woff2');
     }
-
     @font-face {
       font-family: 'ReemKufiFun';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ReemKufiFun-Regular.woff2?v=1753624745') format('woff2');
     }
-
     @font-face {
       font-family: 'Mada';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Mada-Regular.woff2?v=1753624703') format('woff2');
     }
-
     @font-face {
       font-family: 'Tajawal';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Tajawal-Regular.woff2?v=1753624702') format('woff2');
     }
-
     @font-face {
       font-family: 'GreatVibes';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/GreatVibes-Regular.woff2?v=1753586413') format('woff2');
     }
-
     @font-face {
       font-family: 'Amiri';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/Amiri-Regular.woff2?v=1753586413') format('woff2');
     }
-
     @font-face {
       font-family: 'ScheherazadeNew';
       src: url('https://cdn.shopify.com/s/files/1/0675/7698/7937/files/ScheherazadeNew-Regular.woff2?v=1753586413') format('woff2');
     }
-
-    /* Font classes */
-    .font-NotoNaskhArabic { font-family: 'NotoNaskhArabic'; }
-    .font-Harmattan { font-family: 'Harmattan'; }
-    .font-ElMessiri { font-family: 'ElMessiri'; }
-    .font-ReemKufiFun { font-family: 'ReemKufiFun'; }
-    .font-Mada { font-family: 'Mada'; }
-    .font-Tajawal { font-family: 'Tajawal'; }
-    .font-GreatVibes { font-family: 'GreatVibes'; direction: ltr; text-align: left; }
-    .font-Amiri { font-family: 'Amiri'; }
-    .font-ScheherazadeNew { font-family: 'ScheherazadeNew'; }
   </style>
 </head>
 <body>
 
-  <h1>🖋️ Arabic Signature Generator</h1>
+  <h1>Arabic Signature Generator</h1>
 
-  <label for="name-input">Enter your name in Arabic:</label>
-  <input type="text" id="name-input" placeholder="مثال: محمد الأحمد">
+  <input type="text" id="nameInput" placeholder="Type your name in Arabic..." oninput="updatePreview()"/><br/>
 
-  <label for="font-select">Choose a font style:</label>
-  <select id="font-select">
-    <option value="font-NotoNaskhArabic">Noto Naskh Arabic</option>
-    <option value="font-Harmattan">Harmattan</option>
-    <option value="font-ElMessiri">El Messiri</option>
-    <option value="font-ReemKufiFun">Reem Kufi Fun</option>
-    <option value="font-Mada">Mada</option>
-    <option value="font-Tajawal">Tajawal</option>
-    <option value="font-GreatVibes">Great Vibes (Latin)</option>
-    <option value="font-Amiri">Amiri</option>
-    <option value="font-ScheherazadeNew">Scheherazade New</option>
+  <select id="fontSelect" onchange="updatePreview()">
+    <option value="NotoNaskhArabic">Noto Naskh Arabic</option>
+    <option value="Harmattan">Harmattan</option>
+    <option value="ElMessiri">El Messiri</option>
+    <option value="ReemKufiFun">Reem Kufi Fun</option>
+    <option value="Mada">Mada</option>
+    <option value="Tajawal">Tajawal</option>
+    <option value="GreatVibes">Great Vibes</option>
+    <option value="Amiri">Amiri</option>
+    <option value="ScheherazadeNew">Scheherazade New</option>
   </select>
 
-  <div id="signature-preview" class="font-NotoNaskhArabic">
-    توقيعك سيظهر هنا
-  </div>
+  <div id="preview" contenteditable="false">مرحبا</div>
 
-  <button id="download-btn">⬇️ Download Signature</button>
-  <button id="customize-btn" onclick="window.location.href='https://clocore.com/products/custom-portable-handwritten-authorised-signatory-stamp-signature-seal-self-inking-clear-impression-thousands-of-uses-with-one-ink-refill'">🖨️ Customize Signature Stamp</button>
+  <br/>
 
-  <canvas id="signature-canvas" style="display:none;"></canvas>
+  <button class="btn" onclick="downloadSignature()">Download Signature</button>
+  <a class="btn" href="https://clocore.com/products/custom-portable-handwritten-authorised-signatory-stamp-signature-seal-self-inking-clear-impression-thousands-of-uses-with-one-ink-refill" target="_blank">
+    Customize Stamp
+  </a>
 
   <script>
-    const input = document.getElementById('name-input');
-    const select = document.getElementById('font-select');
-    const preview = document.getElementById('signature-preview');
-    const canvas = document.getElementById('signature-canvas');
-    const downloadBtn = document.getElementById('download-btn');
-
-    function updateSignature() {
-      const value = input.value.trim() || 'توقيعك سيظهر هنا';
-      const fontClass = select.value;
-
-      preview.textContent = value;
-      preview.className = fontClass;
-
-      if (fontClass === 'font-GreatVibes') {
-        preview.style.direction = 'ltr';
-        preview.style.textAlign = 'left';
-      } else {
-        preview.style.direction = 'rtl';
-        preview.style.textAlign = 'right';
-      }
+    function updatePreview() {
+      const name = document.getElementById('nameInput').value || 'مرحبا';
+      const font = document.getElementById('fontSelect').value;
+      const preview = document.getElementById('preview');
+      preview.style.fontFamily = font;
+      preview.textContent = name;
     }
 
     function downloadSignature() {
-      const text = preview.textContent;
-      const fontClass = select.value;
-      const fontFamily = getComputedStyle(preview).fontFamily;
-      const direction = getComputedStyle(preview).direction;
-
-      canvas.width = preview.clientWidth;
-      canvas.height = preview.clientHeight;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#000000";
-      ctx.font = "48px " + fontFamily;
-      ctx.textAlign = direction === 'rtl' ? 'right' : 'left';
-      ctx.textBaseline = 'top';
-
-      const x = direction === 'rtl' ? canvas.width - 20 : 20;
-      ctx.fillText(text, x, 20);
-
-      const link = document.createElement('a');
-      link.download = "signature.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+      const preview = document.getElementById('preview');
+      html2canvas(preview).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'signature.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
     }
-
-    input.addEventListener('input', updateSignature);
-    select.addEventListener('change', updateSignature);
-    downloadBtn.addEventListener('click', downloadSignature);
-    updateSignature();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 </body>
 </html>
